@@ -18,35 +18,29 @@ namespace LINQ
     {
         static void Main(string[] args)
         {
-            List<Insan> insans = new List<Insan>();
-            insans.Add(new Insan() { Name = "Ali", Yas = 20 });
-            insans.Add(new Insan() { Name = "Veli", Yas = 12 });
-            insans.Add(new Insan() { Name = "Ayşe", Yas = 35 });
-            insans.Add(new Insan() { Name = "Furkan", Yas = 43 });
-            insans.Add(new Insan() { Name = "Veysel", Yas = 28 });
+            List<int> integerList = new List<int>() { 1,2,3,4,5,6,7,8,9};
 
-            // Query Syntax : from Clause
-            var results = from insan in insans
-                                  where
-                                  insan.Name.Contains("A")
-                                  select insan;
+            // IEnumerable Interface'in altında yer alan GetEnumerator  metotunu kullanarak foreach yapısını çalıştırılır.
+            var result = integerList.Where(x => x > 5);
 
-
-            // Method Syntax
-            var resultMethod = insans.Where(x => x.Name.Contains("A")).Select(c => c.Name).ToList();
-
-
-            foreach (var item in results)
+            foreach (var item in result)
             {
-                Console.WriteLine("Insan : " + item.Name);
+                Console.WriteLine("Result :" + item);
             }
 
-            foreach (var item in resultMethod)
+            IEnumerable<int> resultIEnumerable = integerList.Where(x => x > 5);
+
+            foreach (var item in resultIEnumerable)
             {
-                Console.WriteLine("Insan : " + item);
+                Console.WriteLine("IEnumerable : " + item);
             }
 
+            IQueryable<int> queryableList = from list in integerList.AsQueryable() where list > 5 select list;
 
+            foreach (var item in queryableList)
+            {
+                Console.WriteLine("IQueryable : " + item);
+            }
 
             Console.ReadLine();
         }
