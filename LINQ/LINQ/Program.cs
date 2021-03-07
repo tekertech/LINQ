@@ -5,42 +5,51 @@ using System.Linq;
 namespace LINQ
 {
 
-    /// <summary>
-    /// from <optional data type> <range variable> in <IEnumerable <T>>   <Query Operator> lambda expression <select> <range variable | fields of range variable>
-    /// </summary>
-    class Insan 
+    abstract class Course 
     {
-        public string Name { get; set; }
-        public int Yas { get; set; }
+        public int ID { get; set; }
+        public string Subject { get; set; }
+        public int Rank { get; set; }
+    }
+
+
+    class FreeCourse : Course
+    {
+    
+    }
+
+
+    class PaidCourse : Course 
+    {
+        public decimal Fees { get; set; }
     }
 
     class Program
     {
         static void Main(string[] args)
         {
-            List<int> integerList = new List<int>() { 1,2,3,4,5,6,7,8,9};
+            List<Course> courses = new List<Course>();
+            courses.Add(new FreeCourse { ID = 1, Subject = "A", Rank = 10 });
+            courses.Add(new PaidCourse { ID = 2, Subject = "B", Rank = 11 });
+            courses.Add(new FreeCourse { ID = 3, Subject = "C", Rank = 12 });
+            courses.Add(new FreeCourse { ID = 4, Subject = "D", Rank = 13 });
 
-            // IEnumerable Interface'in altında yer alan GetEnumerator  metotunu kullanarak foreach yapısını çalıştırılır.
-            var result = integerList.Where(x => x > 5);
 
-            foreach (var item in result)
+            var paidCourse = from course in courses.OfType<PaidCourse>() select course;
+
+            var freeCourse = from course in courses.OfType<FreeCourse>() select course;
+
+
+            foreach (var item in freeCourse)
             {
-                Console.WriteLine("Result :" + item);
+                Console.WriteLine(" Free Courses : " + item.Subject);
             }
 
-            IEnumerable<int> resultIEnumerable = integerList.Where(x => x > 5);
-
-            foreach (var item in resultIEnumerable)
+            foreach (var item in paidCourse)
             {
-                Console.WriteLine("IEnumerable : " + item);
+                Console.WriteLine("Paid Courses : " + item.Subject);
             }
 
-            IQueryable<int> queryableList = from list in integerList.AsQueryable() where list > 5 select list;
-
-            foreach (var item in queryableList)
-            {
-                Console.WriteLine("IQueryable : " + item);
-            }
 
             Console.ReadLine();
         }
