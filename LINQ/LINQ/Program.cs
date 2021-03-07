@@ -4,50 +4,37 @@ using System.Linq;
 
 namespace LINQ
 {
+
+    class Student 
+    {
+        public int ID { get; set; }
+
+        public string Name { get; set; }
+        public bool IsFeesSubmitted { get; set; }
+
+    }
     class Program
     {
         static void Main(string[] args)
         {
-            string[] namesDoctor = { "Ahmet", "Ali", "Ayşe", "Fatma" };
-            string[] namesEngineer = { "Ahmet", "Ali", "Furkan", "Cevdet" };
+            List<Student> students = new List<Student>();
+            students.Add(new Student() { ID = 1, Name = "Mehmet", IsFeesSubmitted = true });
+            students.Add(new Student() { ID = 2, Name = "Ali", IsFeesSubmitted = true });
+            students.Add(new Student() { ID = 3, Name = "Burak", IsFeesSubmitted = true });
+            students.Add(new Student() { ID = 4, Name = "Enes", IsFeesSubmitted = true });
+            students.Add(new Student() { ID = 5, Name = "Fatma", IsFeesSubmitted = false });
+            students.Add(new Student() { ID = 6, Name = "Musa", IsFeesSubmitted = true });
 
-            // AUB  Union
-            var result = namesDoctor.Union(namesEngineer);
+            var flag = students.All(x => x.IsFeesSubmitted == true);
+            Console.WriteLine("Tüm öğrencilerin masreafı ödendi mi ? : " + flag);
 
-            foreach (var item in result)
-            {
-                Console.WriteLine(" Ortak Alanlar : " + item);
-            }
+            var isFeesSubmittedFlag = students.Any(x => x.IsFeesSubmitted == false);
+            Console.WriteLine("Masrafı ödenmmeiş varmı : " + isFeesSubmittedFlag);
 
-            // Concat   (Union all gibi çalışır)
-            var resultConcat = namesDoctor.Concat(namesEngineer);
+            Student result = students.Where(x => x.Name.Contains("Mehmet")).FirstOrDefault();
 
-            foreach (var item in resultConcat)
-            {
-                Console.Write(" " + item + "-");
-            }
+            Console.WriteLine("Mehmet : " + result.IsFeesSubmitted);
 
-            // Intersec   (Kesisim)
-
-            var resultIntersec = namesDoctor.Intersect(namesEngineer);
-            Console.WriteLine();
-            Console.WriteLine("Kesişim : Intersec");
-            foreach (var item in resultIntersec)
-            {
-                Console.Write(" " +item +"-");
-            }
-
-
-            Console.WriteLine("*******************************************************************");
-            Console.WriteLine("Distinct");
-            // Distinct
-
-            int[] sayilar = new int[] { 1, 2, 3, 4, 5, 5, 6, 6, 6, 6, 8 };
-            var sayilarDistinct = sayilar.Distinct();
-            foreach (var item in sayilarDistinct)
-            {
-                Console.Write(" " + item + "-");
-            }
 
             Console.ReadLine();
         }
