@@ -5,35 +5,60 @@ using System.Linq;
 namespace LINQ
 {
 
-    class Student 
+    class Employee 
     {
         public int ID { get; set; }
-
-        public string Name { get; set; }
-        public bool IsFeesSubmitted { get; set; }
-
+        public List<Department> Departments { get; set; }
     }
+
+    class Department 
+    {
+        public string Name { get; set; }
+    }
+
     class Program
     {
         static void Main(string[] args)
         {
-            List<Student> students = new List<Student>();
-            students.Add(new Student() { ID = 1, Name = "Mehmet", IsFeesSubmitted = true });
-            students.Add(new Student() { ID = 2, Name = "Ali", IsFeesSubmitted = true });
-            students.Add(new Student() { ID = 3, Name = "Burak", IsFeesSubmitted = true });
-            students.Add(new Student() { ID = 4, Name = "Enes", IsFeesSubmitted = true });
-            students.Add(new Student() { ID = 5, Name = "Fatma", IsFeesSubmitted = false });
-            students.Add(new Student() { ID = 6, Name = "Musa", IsFeesSubmitted = true });
+            List<Employee> employees = new List<Employee>();
 
-            var flag = students.All(x => x.IsFeesSubmitted == true);
-            Console.WriteLine("Tüm öğrencilerin masreafı ödendi mi ? : " + flag);
+            employees.Add(new Employee()
+            {
+                ID = 1,
+                Departments = new List<Department>()
+               {
+                  new Department(){ Name = "Marketing"},
+                  new Department(){ Name = "Sales"}
+               }
+            });
 
-            var isFeesSubmittedFlag = students.Any(x => x.IsFeesSubmitted == false);
-            Console.WriteLine("Masrafı ödenmmeiş varmı : " + isFeesSubmittedFlag);
+            employees.Add(new Employee()
+            {
+                ID = 2,
+                Departments =  new List<Department>()
+                {
+                    new Department(){Name="Advertisement"},
+                    new Department(){Name="Production"}
+                }
+            });
 
-            Student result = students.Where(x => x.Name.Contains("Mehmet")).FirstOrDefault();
+            employees.Add(new Employee()
+            {
+                ID = 3,
+                Departments = new List<Department>()
+                {
+                    new Department(){Name="Production"},
+                    new Department(){Name="Sales"}
+                }
+            });
 
-            Console.WriteLine("Mehmet : " + result.IsFeesSubmitted);
+
+            var resultDeparments = employees.SelectMany(x => x.Departments);
+
+            foreach (var item in resultDeparments)
+            {
+                Console.WriteLine(" " + item.Name);
+            }
 
 
             Console.ReadLine();
