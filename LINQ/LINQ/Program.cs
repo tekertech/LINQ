@@ -4,50 +4,46 @@ using System.Linq;
 
 namespace LINQ
 {
-
-    abstract class Course 
+    class Student 
     {
         public int ID { get; set; }
-        public string Subject { get; set; }
+        public string Name { get; set; }
         public int Rank { get; set; }
+
     }
-
-
-    class FreeCourse : Course
-    {
-    
-    }
-
-
-    class PaidCourse : Course 
-    {
-        public decimal Fees { get; set; }
-    }
-
     class Program
     {
         static void Main(string[] args)
         {
-            List<Course> courses = new List<Course>();
-            courses.Add(new FreeCourse { ID = 1, Subject = "A", Rank = 10 });
-            courses.Add(new PaidCourse { ID = 2, Subject = "B", Rank = 11 });
-            courses.Add(new FreeCourse { ID = 3, Subject = "C", Rank = 12 });
-            courses.Add(new FreeCourse { ID = 4, Subject = "D", Rank = 13 });
+            List<Student> students = new List<Student>();
+            students.Add(new Student() { ID = 1, Name = "Ali", Rank = 10});
+            students.Add(new Student() { ID = 2, Name = "Ayşe", Rank = 11 });
+            students.Add(new Student() { ID = 3, Name = "Furkan", Rank = 12 });
+            students.Add(new Student() { ID = 4, Name = "Ferhat", Rank = 13 });
 
+            // Query Syntax
+            var resultStudent = from student in students where student.Name.Contains("F") orderby student.Rank descending select student;
 
-            var paidCourse = from course in courses.OfType<PaidCourse>() select course;
-
-            var freeCourse = from course in courses.OfType<FreeCourse>() select course;
-
-
-            foreach (var item in freeCourse)
+            foreach (var item in resultStudent)
             {
-                Console.WriteLine(" Free Courses : " + item.Subject);
+                Console.WriteLine(" Name : " + item.Name);
             }
 
-            foreach (var item in paidCourse)
+            // Method Syntax
+
+
+            var result = students.OrderBy(x => x.Rank);
+
+            foreach (var item in result)
             {
-                Console.WriteLine("Paid Courses : " + item.Subject);
+                Console.WriteLine("Order By ASC:" + item.Name);
+            }
+
+            var resultDESC = students.OrderByDescending(x => x.Rank);
+
+            foreach (var item in resultDESC)
+            {
+                Console.WriteLine("Order By Desc : " + item.Name);
             }
 
 
