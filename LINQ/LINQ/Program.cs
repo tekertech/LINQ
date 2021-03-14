@@ -5,60 +5,32 @@ using System.Linq;
 namespace LINQ
 {
 
-    class Employee 
-    {
-        public int ID { get; set; }
-        public List<Department> Departments { get; set; }
-    }
-
-    class Department 
-    {
-        public string Name { get; set; }
-    }
-
+     /// <summary>
+     /// Aggregate Methods (Sum,Max,Min,Avg...)
+     /// </summary>
     class Program
     {
         static void Main(string[] args)
         {
-            List<Employee> employees = new List<Employee>();
+            int[] sayilar = new int[] { 12, 15, 13, 2, 87 };
 
-            employees.Add(new Employee()
-            {
-                ID = 1,
-                Departments = new List<Department>()
-               {
-                  new Department(){ Name = "Marketing"},
-                  new Department(){ Name = "Sales"}
-               }
-            });
+            // Method Syntax
+            int sum = sayilar.Sum();
+            // Query Syntax
+            int total = (from sayi in sayilar select sayi).Sum();
 
-            employees.Add(new Employee()
-            {
-                ID = 2,
-                Departments =  new List<Department>()
-                {
-                    new Department(){Name="Advertisement"},
-                    new Department(){Name="Production"}
-                }
-            });
+            int maxValue = sayilar.Max();
+            int maxValue1 = (from sayi in sayilar select sayi).Max();
 
-            employees.Add(new Employee()
-            {
-                ID = 3,
-                Departments = new List<Department>()
-                {
-                    new Department(){Name="Production"},
-                    new Department(){Name="Sales"}
-                }
-            });
+            int minValue = sayilar.Min();
+            int minValue1 = (from sayi in sayilar select sayi).Min();
 
+            double avgValue = sayilar.Average();
+            double avgValue1 = (from sayi in sayilar select sayi).Average();
 
-            var resultDeparments = employees.SelectMany(x => x.Departments);
+            int countValue = sayilar.Count();
+            int countValue1 = (from sayi in sayilar select sayi).Count();
 
-            foreach (var item in resultDeparments)
-            {
-                Console.WriteLine(" " + item.Name);
-            }
 
 
             Console.ReadLine();
