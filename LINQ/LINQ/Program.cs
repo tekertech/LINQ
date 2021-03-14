@@ -5,31 +5,78 @@ using System.Linq;
 namespace LINQ
 {
 
-     /// <summary>
-     /// Aggregate Methods (Sum,Max,Min,Avg...)
-     /// </summary>
+
+    class Student
+    {
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public string Gender { get; set; }
+        public string Branch { get; set; }
+        public int Age { get; set; }
+
+    }
+
     class Program
     {
         static void Main(string[] args)
         {
-            int[] sayilar = new int[] { 12, 15, 13, 2, 87 };
+            List<Student> students = new List<Student>()
+            {
 
-            // Method Syntax
-            int sum = sayilar.Sum();
-            // Query Syntax
-            int total = (from sayi in sayilar select sayi).Sum();
+                new Student(){ID=1,Name="B",Branch = "10",Gender = "K",Age = 21},
+                new Student(){ID=1,Name="C",Branch = "20",Gender = "K",Age = 25},
+                new Student(){ID=1,Name="B",Branch = "10",Gender = "K",Age = 22},
+                new Student(){ID=1,Name="B",Branch = "10",Gender = "E",Age = 20},
+                new Student(){ID=1,Name="A",Branch = "10",Gender = "K",Age = 20},
+                new Student(){ID=1,Name="B",Branch = "20",Gender = "E",Age = 24},
+                new Student(){ID=1,Name="C",Branch = "20",Gender = "E",Age = 24},
+                new Student(){ID=1,Name="B",Branch = "20",Gender = "E",Age = 24},
+                new Student(){ID=1,Name="C",Branch = "20",Gender = "K",Age = 26}
+            };
 
-            int maxValue = sayilar.Max();
-            int maxValue1 = (from sayi in sayilar select sayi).Max();
 
-            int minValue = sayilar.Min();
-            int minValue1 = (from sayi in sayilar select sayi).Min();
+            //var result = from student in students group student by student.Name;
 
-            double avgValue = sayilar.Average();
-            double avgValue1 = (from sayi in sayilar select sayi).Average();
+            // var result = students.GroupBy(x => x.Name);
+            // foreach (var item in result)
+            // {
+            //     Console.WriteLine(" " + item.Key + " " + item.Count());
+            // 
+            //     foreach (var student in item)
+            //     {
+            //         Console.WriteLine("Branch : " + student.Name + " Gender : " + student.Gender);
+            //     }
+            // }
+            // 
 
-            int countValue = sayilar.Count();
-            int countValue1 = (from sayi in sayilar select sayi).Count();
+            // Group By Multiple
+
+            //var result = students.GroupBy(x => new { x.Branch, x.Gender }).OrderByDescending(g => g.Key.Branch).ThenBy(g => g.Key.Gender).Select(g =>
+            //{
+            //    Branch = g.Key.Branch,
+            //    Gender = g.Key.Gender,
+            //    Students = g.OrderBy(x=> x.Name)
+            //});
+
+
+
+            var res =    from student in students group student by new { student.Branch, student.Gender } into result
+                         orderby result.Key.Branch descending 
+                         select new
+                         {
+                             Branch = result.Key.Branch,
+                             Gender = result.Key.Gender,
+                             Studensts = result.OrderBy(x => x.Name)
+                         };
+
+            foreach (var group in res)
+            {
+                Console.WriteLine("Branch : " + group.Branch + " Gender : " + group.Gender + " CCount : " + group.Studensts.Count());
+                foreach (var item in group.Studensts)
+                {
+                    Console.WriteLine("Name :  " + item.Name + " Branch :" + item.Branch + " Gender :" + item.Gender);
+                }
+            }
 
 
 
