@@ -4,15 +4,18 @@ using System.Linq;
 
 namespace LINQ
 {
-
-
-    class Student
+     
+    public class Employee 
     {
         public int ID { get; set; }
         public string Name { get; set; }
-        public string Gender { get; set; }
-        public string Branch { get; set; }
-        public int Age { get; set; }
+        public int AddressId { get; set; }
+    }
+
+    public class Address 
+    {
+        public int ID { get; set; }
+        public string AdsressLine { get; set; }
 
     }
 
@@ -20,116 +23,59 @@ namespace LINQ
     {
         static void Main(string[] args)
         {
-            List<Student> students = new List<Student>()
+            List<Employee> employees = new List<Employee>()
             {
+                new Employee(){ID =1,Name="Preety",AddressId = 1},
+                new Employee(){ID =2,Name="Privanka",AddressId = 2},
+                new Employee(){ID =3,Name="Anurag",AddressId = 3},
+                new Employee(){ID =4,Name="Pranaya",AddressId = 4},
+                new Employee(){ID =5,Name="Hina",AddressId = 5},
+                new Employee(){ID =6,Name="Sambit",AddressId = 6},
+                new Employee(){ID =7,Name="Happy",AddressId = 7},
+                new Employee(){ID =8,Name="Tarun",AddressId = 8},
+                new Employee(){ID =9,Name="Santos",AddressId = 9},
+                new Employee(){ID =10,Name="Raja",AddressId = 10},
+                new Employee(){ID =11,Name="Sudhanshu",AddressId = 11}
+            };
 
-                new Student(){ID=1,Name="B",Branch = "10",Gender = "K",Age = 21},
-                new Student(){ID=1,Name="C",Branch = "20",Gender = "K",Age = 25},
-                new Student(){ID=1,Name="B",Branch = "10",Gender = "K",Age = 22},
-                new Student(){ID=1,Name="B",Branch = "10",Gender = "E",Age = 20},
-                new Student(){ID=1,Name="A",Branch = "10",Gender = "K",Age = 20},
-                new Student(){ID=1,Name="B",Branch = "20",Gender = "E",Age = 24},
-                new Student(){ID=1,Name="C",Branch = "20",Gender = "E",Age = 24},
-                new Student(){ID=1,Name="B",Branch = "20",Gender = "E",Age = 24},
-                new Student(){ID=1,Name="C",Branch = "20",Gender = "K",Age = 26}
+            List<Address> addresses = new List<Address>() {
+             new Address(){ID = 1, AdsressLine = "AdsressLine1"},
+             new Address(){ID = 2, AdsressLine = "AdsressLine2"},
+             new Address(){ID = 3, AdsressLine = "AdsressLine3"},
+             new Address(){ID = 4, AdsressLine = "AdsressLine4"},
+             new Address(){ID = 5, AdsressLine = "AdsressLine5"},
+             new Address(){ID = 9, AdsressLine = "AdsressLine9"},
+             new Address(){ID = 10, AdsressLine = "AdsressLine10"},
+             new Address(){ID = 11, AdsressLine = "AdsressLine11"}
             };
 
 
-            //var result = from student in students group student by student.Name;
+            // Query Syntax
+            var result = from employee in employees
+                         join adrees in addresses on employee.AddressId equals adrees.ID
+                         select new
+                         {
+                             EmployeeName = employee.Name,
+                             AddressLine = adrees.AdsressLine
+                         };
 
-            // var result = students.GroupBy(x => x.Name);
-            // foreach (var item in result)
-            // {
-            //     Console.WriteLine(" " + item.Key + " " + item.Count());
-            // 
-            //     foreach (var student in item)
-            //     {
-            //         Console.WriteLine("Branch : " + student.Name + " Gender : " + student.Gender);
-            //     }
-            // }
-            // 
-
-            // Group By Multiple
-
-            //var result = students.GroupBy(x => new { x.Branch, x.Gender }).OrderByDescending(g => g.Key.Branch).ThenBy(g => g.Key.Gender).Select(g =>
-            //{
-            //    Branch = g.Key.Branch,
-            //    Gender = g.Key.Gender,
-            //    Students = g.OrderBy(x=> x.Name)
-            //});
-
-
-
-            var res = from student in students
-                      group student by new { student.Branch, student.Gender } into result
-                      orderby result.Key.Branch descending
-                      select new
-                      {
-                          Branch = result.Key.Branch,
-                          Gender = result.Key.Gender,
-                          Studensts = result.OrderBy(x => x.Name)
-                      };
-
-            foreach (var group in res)
+            foreach (var item in result.ToList())
             {
-                Console.WriteLine("Branch : " + group.Branch + " Gender : " + group.Gender + " CCount : " + group.Studensts.Count());
-                foreach (var item in group.Studensts)
-                {
-                    Console.WriteLine("Name :  " + item.Name + " Branch :" + item.Branch + " Gender :" + item.Gender);
-                }
+                Console.WriteLine("EmployeeName : " + item.EmployeeName + " AddreesLine :" + item.AddressLine);
             }
 
+            //Method Syntax :
 
-
-
-
-
-            List<Ogrenci> ogrencis = new List<Ogrenci>() {
-               new Ogrenci(){ OgrNo = 1, Name = "A", Price = 25, Lesson = "FEN"},
-               new Ogrenci(){ OgrNo = 1, Name = "A", Price = 10, Lesson = "FEN"},
-               new Ogrenci(){ OgrNo = 1, Name = "A", Price = 8, Lesson = "MAT"},
-               new Ogrenci(){ OgrNo = 1, Name = "A", Price = 52, Lesson = "BIO"},
-               new Ogrenci(){ OgrNo = 1, Name = "A", Price = 50, Lesson = "BEDEN"},
-               new Ogrenci(){ OgrNo = 2, Name = "B", Price = 50, Lesson = "MAT"},
-               new Ogrenci(){ OgrNo = 2, Name = "B", Price = 50, Lesson = "FEN"},
-               new Ogrenci(){ OgrNo = 3, Name = "C", Price = 50, Lesson = "BIO"}
-            };
-
-
-            var sonuc = from ogr in ogrencis where ogr.Name.Contains("A") select ogr;
-
-            var groupBy = from ogr in ogrencis group ogr by new { ogr.Name, ogr.Lesson } into result 
-                          select new { 
-                             Name = result.Key.Name,
-                             Lesson = result.Key.Lesson,
-                             Ogrenciler = result.OrderBy(x=> x.Name)
-                          }; 
-
-
-            foreach (var item in groupBy)
+            result = employees.Join(addresses, x => x.AddressId, y => y.ID, (x, y) => new
             {
-                Console.WriteLine("Name : " + item.Name + " Lesson : " + item.Lesson + " Adet :" + item.Ogrenciler.Count());
-
-            }
-
-
-
-
-
-
+                EmployeeName = x.Name,
+                AddressLine = y.AdsressLine
+            }).ToList();
 
 
 
             Console.ReadLine();
         }
 
-        class Ogrenci
-        {
-            public int OgrNo { get; set; }
-            public string Name { get; set; }
-            public string Lesson { get; set; }
-            public decimal Price { get; set; }
-
-        }
     }
 }
