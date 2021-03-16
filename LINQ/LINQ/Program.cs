@@ -60,14 +60,15 @@ namespace LINQ
 
 
 
-            var res =    from student in students group student by new { student.Branch, student.Gender } into result
-                         orderby result.Key.Branch descending 
-                         select new
-                         {
-                             Branch = result.Key.Branch,
-                             Gender = result.Key.Gender,
-                             Studensts = result.OrderBy(x => x.Name)
-                         };
+            var res = from student in students
+                      group student by new { student.Branch, student.Gender } into result
+                      orderby result.Key.Branch descending
+                      select new
+                      {
+                          Branch = result.Key.Branch,
+                          Gender = result.Key.Gender,
+                          Studensts = result.OrderBy(x => x.Name)
+                      };
 
             foreach (var group in res)
             {
@@ -80,7 +81,55 @@ namespace LINQ
 
 
 
+
+
+
+            List<Ogrenci> ogrencis = new List<Ogrenci>() {
+               new Ogrenci(){ OgrNo = 1, Name = "A", Price = 25, Lesson = "FEN"},
+               new Ogrenci(){ OgrNo = 1, Name = "A", Price = 10, Lesson = "FEN"},
+               new Ogrenci(){ OgrNo = 1, Name = "A", Price = 8, Lesson = "MAT"},
+               new Ogrenci(){ OgrNo = 1, Name = "A", Price = 52, Lesson = "BIO"},
+               new Ogrenci(){ OgrNo = 1, Name = "A", Price = 50, Lesson = "BEDEN"},
+               new Ogrenci(){ OgrNo = 2, Name = "B", Price = 50, Lesson = "MAT"},
+               new Ogrenci(){ OgrNo = 2, Name = "B", Price = 50, Lesson = "FEN"},
+               new Ogrenci(){ OgrNo = 3, Name = "C", Price = 50, Lesson = "BIO"}
+            };
+
+
+            var sonuc = from ogr in ogrencis where ogr.Name.Contains("A") select ogr;
+
+            var groupBy = from ogr in ogrencis group ogr by new { ogr.Name, ogr.Lesson } into result 
+                          select new { 
+                             Name = result.Key.Name,
+                             Lesson = result.Key.Lesson,
+                             Ogrenciler = result.OrderBy(x=> x.Name)
+                          }; 
+
+
+            foreach (var item in groupBy)
+            {
+                Console.WriteLine("Name : " + item.Name + " Lesson : " + item.Lesson + " Adet :" + item.Ogrenciler.Count());
+
+            }
+
+
+
+
+
+
+
+
+
             Console.ReadLine();
+        }
+
+        class Ogrenci
+        {
+            public int OgrNo { get; set; }
+            public string Name { get; set; }
+            public string Lesson { get; set; }
+            public decimal Price { get; set; }
+
         }
     }
 }
