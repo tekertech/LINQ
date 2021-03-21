@@ -10,6 +10,7 @@ namespace LINQ
         public int ID { get; set; }
         public string Name { get; set; }
         public int AddressId { get; set; }
+        public int DepartmentId { get; set; }
     }
 
     public class Address 
@@ -19,23 +20,29 @@ namespace LINQ
 
     }
 
+    public class Department 
+    {
+        public int ID { get; set; }
+        public string Name { get; set; }
+    }
+
     class Program
     {
         static void Main(string[] args)
         {
             List<Employee> employees = new List<Employee>()
             {
-                new Employee(){ID =1,Name="Preety",AddressId = 1},
-                new Employee(){ID =2,Name="Privanka",AddressId = 2},
-                new Employee(){ID =3,Name="Anurag",AddressId = 3},
-                new Employee(){ID =4,Name="Pranaya",AddressId = 4},
-                new Employee(){ID =5,Name="Hina",AddressId = 5},
-                new Employee(){ID =6,Name="Sambit",AddressId = 6},
-                new Employee(){ID =7,Name="Happy",AddressId = 7},
-                new Employee(){ID =8,Name="Tarun",AddressId = 8},
-                new Employee(){ID =9,Name="Santos",AddressId = 9},
-                new Employee(){ID =10,Name="Raja",AddressId = 10},
-                new Employee(){ID =11,Name="Sudhanshu",AddressId = 11}
+                new Employee(){ID =1  ,DepartmentId = 10 ,Name="Preety",AddressId = 1},
+                new Employee(){ID =2  ,DepartmentId = 20 ,Name="Privanka",AddressId = 2},
+                new Employee(){ID =3  ,DepartmentId = 20 ,Name="Anurag",AddressId = 3},
+                new Employee(){ID =4  ,DepartmentId = 0 ,Name="Pranaya",AddressId = 4},
+                new Employee(){ID =5  ,DepartmentId = 0 ,Name="Hina",AddressId = 5},
+                new Employee(){ID =6  ,DepartmentId = 0 ,Name="Sambit",AddressId = 6},
+                new Employee(){ID =7  ,DepartmentId = 0 ,Name="Happy",AddressId = 7},
+                new Employee(){ID =8  ,DepartmentId = 0 ,Name="Tarun",AddressId = 8},
+                new Employee(){ID =9  ,DepartmentId = 10 ,Name="Santos",AddressId = 9},
+                new Employee(){ID =10 ,DepartmentId = 20 ,Name="Raja",AddressId = 10},
+                new Employee(){ID =11 ,DepartmentId = 30 ,Name="Sudhanshu",AddressId = 11}
             };
 
             List<Address> addresses = new List<Address>() {
@@ -48,6 +55,14 @@ namespace LINQ
              new Address(){ID = 10, AdsressLine = "AdsressLine10"},
              new Address(){ID = 11, AdsressLine = "AdsressLine11"}
             };
+
+
+            List<Department> departments = new List<Department>() {
+              new Department(){ ID = 10, Name = "IT"},
+              new Department(){ ID = 20, Name = "HR"},
+              new Department(){ ID = 30, Name = "Payroll"}
+            };
+
 
 
             // Query Syntax
@@ -65,13 +80,28 @@ namespace LINQ
             }
 
             //Method Syntax :
-
             result = employees.Join(addresses, x => x.AddressId, y => y.ID, (x, y) => new
             {
                 EmployeeName = x.Name,
                 AddressLine = y.AdsressLine
             }).ToList();
 
+
+            // Multiple Data Source
+            var multipleDataSource = from employee in employees
+                                     join adress in addresses on employee.AddressId equals adress.ID
+                                     join department in departments on employee.DepartmentId equals department.ID
+                                     select new
+                                     {
+                                         EmployeeName = employee.Name,
+                                         AddressLine = adress.AdsressLine,
+                                         DepartmentName = department.Name
+                                     };
+
+            foreach (var item in multipleDataSource)
+            {
+                Console.WriteLine(item);
+            }
 
 
             Console.ReadLine();
