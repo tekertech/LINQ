@@ -30,79 +30,35 @@ namespace LINQ
     {
         static void Main(string[] args)
         {
-            List<Employee> employees = new List<Employee>()
-            {
-                new Employee(){ID =1  ,DepartmentId = 10 ,Name="Preety",AddressId = 1},
-                new Employee(){ID =2  ,DepartmentId = 20 ,Name="Privanka",AddressId = 2},
-                new Employee(){ID =3  ,DepartmentId = 20 ,Name="Anurag",AddressId = 3},
-                new Employee(){ID =4  ,DepartmentId = 0 ,Name="Pranaya",AddressId = 4},
-                new Employee(){ID =5  ,DepartmentId = 0 ,Name="Hina",AddressId = 5},
-                new Employee(){ID =6  ,DepartmentId = 0 ,Name="Sambit",AddressId = 6},
-                new Employee(){ID =7  ,DepartmentId = 0 ,Name="Happy",AddressId = 7},
-                new Employee(){ID =8  ,DepartmentId = 0 ,Name="Tarun",AddressId = 8},
-                new Employee(){ID =9  ,DepartmentId = 10 ,Name="Santos",AddressId = 9},
-                new Employee(){ID =10 ,DepartmentId = 20 ,Name="Raja",AddressId = 10},
-                new Employee(){ID =11 ,DepartmentId = 30 ,Name="Sudhanshu",AddressId = 11}
-            };
+            List<int> numbers = new List<int>() { 1,2,3,4,5,6,7,8,9,10 };
 
-            List<Address> addresses = new List<Address>() {
-             new Address(){ID = 1, AdsressLine = "AdsressLine1"},
-             new Address(){ID = 2, AdsressLine = "AdsressLine2"},
-             new Address(){ID = 3, AdsressLine = "AdsressLine3"},
-             new Address(){ID = 4, AdsressLine = "AdsressLine4"},
-             new Address(){ID = 5, AdsressLine = "AdsressLine5"},
-             new Address(){ID = 9, AdsressLine = "AdsressLine9"},
-             new Address(){ID = 10, AdsressLine = "AdsressLine10"},
-             new Address(){ID = 11, AdsressLine = "AdsressLine11"}
-            };
+            //  ElementAt, ElementAtOrDefault
+            // var element = numbers.ElementAt(1);
+            //  var element = numbers.ElementAt(12);  // 'Index was out of range. Must be non-negative and less than the size of the collection. (Parameter 'index')'
+            var element = numbers.ElementAtOrDefault(12);
+            Console.WriteLine("ElementAt : " + element);
+
+            // First, FirstOrDefault
+            // var first = numbers.First();  
+            //var first = numbers.First(x => x % 3 == 0);
+            // var first = numbers.First(x => x > 50); // System.InvalidOperationException   Message = Sequence contains no matching element
+            var first = numbers.FirstOrDefault(x => x > 50);
+            Console.WriteLine("First :" + first);
+
+            // Last, LastOrDefault
+            //var lastNumber = numbers.Last();
+            var lastNumber = (from number in numbers select number).Last();
+            Console.WriteLine("Last Number :" + lastNumber);
 
 
-            List<Department> departments = new List<Department>() {
-              new Department(){ ID = 10, Name = "IT"},
-              new Department(){ ID = 20, Name = "HR"},
-              new Department(){ ID = 30, Name = "Payroll"}
-            };
+            // Single, SingleOrDefault
+            List<int> singleNumber = new List<int>() { 38, 68};
+            //var single = singleNumber.Single();
+            //var single = singleNumber.Single();  // System.InvalidOperationException: 'Sequence contains more than one element'
+            //var single = singleNumber.SingleOrDefault(); // System.InvalidOperationException: 'Sequence contains more than one element'
+            var single = singleNumber.SingleOrDefault( x => x > 48); 
 
-
-
-            // Query Syntax
-            var result = from employee in employees
-                         join adrees in addresses on employee.AddressId equals adrees.ID
-                         select new
-                         {
-                             EmployeeName = employee.Name,
-                             AddressLine = adrees.AdsressLine
-                         };
-
-            foreach (var item in result.ToList())
-            {
-                Console.WriteLine("EmployeeName : " + item.EmployeeName + " AddreesLine :" + item.AddressLine);
-            }
-
-            //Method Syntax :
-            result = employees.Join(addresses, x => x.AddressId, y => y.ID, (x, y) => new
-            {
-                EmployeeName = x.Name,
-                AddressLine = y.AdsressLine
-            }).ToList();
-
-
-            // Multiple Data Source
-            var multipleDataSource = from employee in employees
-                                     join adress in addresses on employee.AddressId equals adress.ID
-                                     join department in departments on employee.DepartmentId equals department.ID
-                                     select new
-                                     {
-                                         EmployeeName = employee.Name,
-                                         AddressLine = adress.AdsressLine,
-                                         DepartmentName = department.Name
-                                     };
-
-            foreach (var item in multipleDataSource)
-            {
-                Console.WriteLine(item);
-            }
-
+            Console.WriteLine("Single Number : " + single);
 
             Console.ReadLine();
         }
