@@ -1,6 +1,15 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+
+
+class Product
+{
+    public int ID { get; set; }
+    public string Name { get; set; }
+    public double Price { get; set; }
+}
 
 namespace LINQ
 {
@@ -9,35 +18,26 @@ namespace LINQ
     {
         static void Main(string[] args)
         {
-            // Range
-            List<int> numbers = Enumerable.Range(1, 10).ToList();
-            numbers = Enumerable.Range(1, 10).Where(x => x % 2 == 0).ToList();
-            numbers = Enumerable.Range(5, 7).Select(x => x * x).ToList();
-            foreach (var item in numbers)
+            // ToArray(), ToList()
+            int[] arrayNumbers = { 10, 20, 30, 40, 50, 60, 78};
+            List<int> listNumbers = arrayNumbers.ToList();
+            arrayNumbers = listNumbers.ToArray();
+
+            List<Product> products = new List<Product>()
             {
-                Console.WriteLine(item);
+                new Product(){ ID = 1, Name = "A", Price = 10},
+                new Product(){ ID = 2, Name = "B", Price = 20},
+                new Product(){ ID = 3, Name = "C", Price = 30}
+            };
+
+            // (ToDictionary)
+            Dictionary<int, Product> keyValuePairs = products.ToDictionary(x=> x.ID);
+
+            foreach (var item in keyValuePairs)
+            {
+                Console.WriteLine("Key :" + item.Key + " Value : " + item.Value.ID);
             }
 
-            // Repeat
-
-            IEnumerable<string> names = Enumerable.Repeat("Mehmet", 5);
-
-            foreach (var item in names)
-            {
-                Console.WriteLine(item);
-            }
-
-            //Zip
-
-            int[] numberSequence = { 10, 20, 30, 40 };
-            string[] nameSequence = { "A", "B", "C", "D", "E", "F", };
-
-            var result = numberSequence.Zip(nameSequence, (x, y) => x + " - " + y);
-
-            foreach (var item in result)
-            {
-                Console.WriteLine(item);
-            }
 
             Console.ReadLine();
         }
